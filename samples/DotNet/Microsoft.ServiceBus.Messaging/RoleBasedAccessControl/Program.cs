@@ -17,7 +17,6 @@
 
 namespace MessagingSamples
 {
-    using Microsoft.IdentityModel.Clients.ActiveDirectory;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -27,7 +26,6 @@ namespace MessagingSamples
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.Identity.Client;
-    using System.Collections;
     using Microsoft.Azure.ServiceBus.Primitives;
     using Microsoft.Azure.ServiceBus;
     using Microsoft.Azure.ServiceBus.InteropExtensions;
@@ -196,7 +194,7 @@ namespace MessagingSamples
                 return authResult.AccessToken;
             }, $"https://login.windows.net/{TenantId}");
 
-            var qc = new QueueClient(new Uri($"sb://{serviceBusNamespace}/").ToString(), QueueName, aadTokenProvider);
+            var qc = new QueueClient(new Uri($"sb://{ServiceBusNamespace}/").ToString(), QueueName, aadTokenProvider);
 
             await SendReceiveAsync(qc);
 
@@ -264,13 +262,13 @@ namespace MessagingSamples
                                 .WithAuthority(authority)
                                 .WithCertificate(certificate)
                                 .Build();
-                
+
                 var serviceBusAudience = new Uri("https://servicebus.azure.net");
 
                 var authResult = await app.AcquireTokenForClient(new string[] { $"{serviceBusAudience}/.default" }).ExecuteAsync();
                 return authResult.AccessToken;
 
-            });
+            }, $"https://login.windows.net/{TenantId}");
 
             var qc = new QueueClient(new Uri($"sb://{ServiceBusNamespace}/").ToString(), QueueName, aadTokenProvider);
 
